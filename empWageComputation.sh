@@ -10,7 +10,7 @@ EMP_RATE_PER_HR=20
 MAX_WORKING_DAYS=20
 # Variables
 totalSalary=0
-totalEmpHrs=0
+totalWorkHrs=0
 totalWorkingDays=0
 salary=0
 workHrs=0
@@ -25,13 +25,12 @@ else
 	echo "Employee is absent"
 fi
 # To calculate daily employee wage
-if [ $IS_PRESENT -eq $employeeCheck ]
-then
-	empHrs=8
-	salary=$(($EMP_RATE_PER_HRS*$empHrs))
-else
-	salary=0
-fi
+function calcDailyWage()
+{
+	empHrs=$1
+	wage=$(($EMP_RATE_PER_HR*$empHrs))
+	echo $wage
+}
 function getWorkingHrs()
 {
 	case $1 in
@@ -47,22 +46,18 @@ function getWorkingHrs()
 	esac
 	echo $workHrs
 }
-# To add part time employee and calculate it's wage using case statement
-#To calculate the wage for month
-for((day=1;day<=$MAX_WORKING_DAYS;day++))
-do
-	empHrs="$( getWorkingHrs $((RANDOM%3)) )"
-	salary=$(($EMP_RATE_PER_HR*$empHrs))
-	totalSalary=$(($totalSalary+$salary))
-done
 # Calculate wages till a condition of total working hours or days is reached for a month
 while [[ $totalWorkingDays -lt $MAX_WORKING_DAYS && $totalEmpHrs -lt $MAX_WORKING_HRS ]]
 do
 	((totalWorkingDays++))
-	empHrs="$( getWorkingHrs $((RANDOM%3)))"
-	totalEmpHrs=$(($totalEmpHrs+$empHrs))
+	empHrs="$( getWorkingHrs $((RANDOM%3)) )"
+	totalWorkHrs=$(($totalWorkHrs+$empHrs))
+	#Store daily wage of an employee
+	empDailyWage[$totalWorkingDays]="$( calcDailyWage $empHrs )"
 done
-totalSalary=$(($totalEmpHrs*$EMP_RATE_PER_HR))
+totalSalary=$(($totalWorkHrs*$EMP_RATE_PER_HR))
+echo $totalSalary
+echo "Daily Wage : " ${empDailyWage[@]}
 
 
 
