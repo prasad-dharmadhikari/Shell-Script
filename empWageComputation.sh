@@ -13,6 +13,7 @@ totalSalary=0
 totalEmpHrs=0
 totalWorkingDays=0
 salary=0
+workHrs=0
 
 employeeCheck=$((RANDOM%3))
 
@@ -31,22 +32,26 @@ then
 else
 	salary=0
 fi
+function getWorkingHrs()
+{
+	case $1 in
+		$IS_PART_TIME)
+			workHrs=4
+			;;
+		$IS_FULL_TIME)
+			workHrs=8
+			;;
+		*)
+			workHrs=0
+			;;
+	esac
+	echo $workHrs
+}
 # To add part time employee and calculate it's wage using case statement
 #To calculate the wage for month
 for((day=1;day<=$MAX_WORKING_DAYS;day++))
 do
-	employeeCheck=$((RANDOM%3))
-	case $employeeCheck in
-		$IS_PART_TIME)
-			empHrs=4
-			;;
-		$IS_FULL_TIME)
-			empHrs=8
-			;;
-		*)
-			empHrs=0
-			;;
-	esac
+	empHrs="$( getWorkingHrs $((RANDOM%3)) )"
 	salary=$(($EMP_RATE_PER_HR*$empHrs))
 	totalSalary=$(($totalSalary+$salary))
 done
@@ -54,21 +59,9 @@ done
 while [[ $totalWorkingDays -lt $MAX_WORKING_DAYS && $totalEmpHrs -lt $MAX_WORKING_HRS ]]
 do
 	((totalWorkingDays++))
-	employeeCheck=$((RANDOM%3))
-  	case $employeeCheck in
-		$IS_PART_TIME)
-			empHrs=4
-			;;
-		$IS_FULL_TIME)
-			empHrs=8
-			;;
-		*)
-			empHrs=0
-			;;
-	esac
+	empHrs="$( getWorkingHrs $((RANDOM%3)))"
 	totalEmpHrs=$(($totalEmpHrs+$empHrs))
 done
-
 totalSalary=$(($totalEmpHrs*$EMP_RATE_PER_HR))
 
 
