@@ -56,8 +56,8 @@ do
 	((totalWorkingDays++))
 	employeeCheck=$((RANDOM%3))
   	case $employeeCheck in
-      $IS_PART_TIME)
-         empHrs=4
+		$IS_PART_TIME)
+			empHrs=4
          ;;
       $IS_FULL_TIME)
          empHrs=8
@@ -65,7 +65,7 @@ do
       *)
          empHrs=0
          ;;
-   esac
+	esac
 	totalEmpHrs=$(($totalEmpHrs+$empHrs))
 done
 
