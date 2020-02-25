@@ -15,15 +15,6 @@ totalWorkingDays=0
 salary=0
 workHrs=0
 
-employeeCheck=$((RANDOM%3))
-
-# To check whether employee is present or not
-if [ $IS_PRESENT -eq $employeeCheck ]
-then
-	echo "Employee is present"
-else
-	echo "Employee is absent"
-fi
 # To calculate daily employee wage
 function calcDailyWage()
 {
@@ -53,11 +44,14 @@ do
 	empHrs="$( getWorkingHrs $((RANDOM%3)) )"
 	totalWorkHrs=$(($totalWorkHrs+$empHrs))
 	#Store daily wage of an employee
-	empDailyWage[$totalWorkingDays]="$( calcDailyWage $empHrs )"
+	empDailyWage["$totalWorkingDays"]="$( calcDailyWage $empHrs )"
 done
 totalSalary=$(($totalWorkHrs*$EMP_RATE_PER_HR))
-echo $totalSalary
-echo "Daily Wage : " ${empDailyWage[@]}
+echo "Total salary is:" $totalSalary
+echo "Day and daily wages are:"
+echo "All days : " ${!empDailyWage[@]}
+echo "All wages : " ${empDailyWage[@]}
+
 
 
 
